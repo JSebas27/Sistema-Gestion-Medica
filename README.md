@@ -33,11 +33,9 @@ El sistema trabaja con dos bases de datos independientes:
 ### 🟦 SQL (SQLite)
 Se encarga de almacenar información estructurada:
 
-- Pacientes (nombre, teléfono, correo)
+- Pacientes
 - Médicos
 - Citas médicas
-
-Esta información se gestiona mediante SQLAlchemy.
 
 ---
 
@@ -45,10 +43,12 @@ Esta información se gestiona mediante SQLAlchemy.
 Se encarga de información médica flexible:
 
 - Alergias
-- Hábitos (fuma, alcohol)
-- Datos médicos adicionales
+- Hábitos
+- Información médica adicional
 
 Cada documento se relaciona con el paciente mediante:
+
+```text id="mongoid"
 paciente_id
 
 
@@ -90,9 +90,9 @@ GET /paciente/completo/<id>
   }
 }
 
-# 🚀 PASO A PASO DEL FUNCIONAMIENTO
+## 🚀 PASO A PASO DEL FUNCIONAMIENTO
 
-## 1️⃣ Inicio del servidor
+### 1️⃣ Inicio del servidor
 Se ejecuta la aplicación Flask:
 
 ```bash
@@ -100,7 +100,7 @@ python app.py
 
 http://127.0.0.1:5000
 
-##2️⃣ Base de datos SQL (SQLite)
+### 2️⃣ Base de datos SQL (SQLite)
 📌 Qué hace
 
 Guarda información estructurada como:
@@ -113,7 +113,7 @@ Se crea un paciente desde el endpoint /pacientes
 Se guarda en SQLite usando SQLAlchemy
 Los datos quedan almacenados en la tabla pacientes
 
-##3️⃣ Base de datos NoSQL (MongoDB)
+### 3️⃣ Base de datos NoSQL (MongoDB)
 📌 Qué hace
 
 Guarda información flexible del paciente como:
@@ -126,16 +126,16 @@ Se envía información al endpoint /mongo/paciente
 Se guarda en la colección info_paciente
 Cada documento se relaciona con un paciente mediante paciente_id
 
-##4️⃣ Relación entre SQL y NoSQL
+### 4️⃣ Relación entre SQL y NoSQL
 
 Ambas bases de datos se conectan mediante:
 id del paciente (id_paciente)
 
-##5️⃣ Endpoint puente (INTEGRACIÓN)
+### 5️⃣ Endpoint puente (INTEGRACIÓN)
 📌 Endpoint principal:
 GET /paciente/completo/<id>
 
-##Resultado final
+## Resultado final
 
 El sistema responde con algo como:
 {

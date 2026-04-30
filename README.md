@@ -1,170 +1,181 @@
 # 🏥 Sistema de Gestión Médica
 
-API REST desarrollada en Flask para la gestión de pacientes, médicos y citas, integrando bases de datos SQL (SQLite) y NoSQL (MongoDB).
+## 📌 Descripción del Proyecto
+
+Este proyecto consiste en el desarrollo de un sistema de gestión médica que permite administrar pacientes, médicos y citas, integrando una arquitectura híbrida con bases de datos SQL y NoSQL.
+
+El sistema implementa **persistencia políglota**, utilizando:
+
+* Base de datos relacional (SQLite) para datos estructurados.
+* Base de datos NoSQL (MongoDB) para información médica flexible.
 
 ---
 
-## 📌 Descripción del proyecto
+## 🎯 Objetivo
 
-Este sistema simula un entorno médico real donde la información se divide según su naturaleza:
-
-- 🟦 SQL (SQLite): datos estructurados como pacientes, médicos y citas.
-- 🟢 NoSQL (MongoDB): datos flexibles como alergias, hábitos e información médica adicional.
-
-El objetivo es demostrar la integración de ambos tipos de bases de datos en una sola aplicación funcional.
+Escalar la aplicación mediante el uso de una base de datos NoSQL para gestionar información no estructurada, mejorando la flexibilidad y el rendimiento del sistema.
 
 ---
 
-## ⚙️ Tecnologías utilizadas
+## ⚙️ Tecnologías Utilizadas
 
-- Python 3.x
-- Flask
-- Flask-SQLAlchemy
-- SQLite
-- MongoDB
-- PyMongo
-
----
-
-## 🧠 Arquitectura del sistema
-
-El sistema trabaja con dos bases de datos independientes:
-
-### 🟦 SQL (SQLite)
-Se encarga de almacenar información estructurada:
-
-- Pacientes
-- Médicos
-- Citas médicas
+* Python
+* Flask
+* SQLite
+* MongoDB
+* PyMongo
+* SQLAlchemy
 
 ---
 
-### 🟢 NoSQL (MongoDB)
-Se encarga de información médica flexible:
+## 🧠 Arquitectura del Sistema
 
-- Alergias
-- Hábitos
-- Información médica adicional
+El sistema sigue una arquitectura híbrida:
 
-Cada documento se relaciona con el paciente mediante:
+* **SQL (SQLite):**
 
-```text id="mongoid"
-paciente_id
+  * Pacientes
+  * Médicos
+  * Citas
 
+* **NoSQL (MongoDB):**
 
----
+  * Información médica del paciente
+  * Alergias
+  * Hábitos
+  * Medicamentos
 
-## 🔗 Integración SQL + NoSQL
+Ambas bases de datos se integran mediante el campo:
 
-La integración se realiza mediante el **ID del paciente**, permitiendo combinar datos estructurados (SQL) y no estructurados (MongoDB).
-
----
-
-## ⚙️ Endpoint de integración (PUENTE)
-GET /paciente/completo/<id>
-
-
-### 🔄 Funcionamiento paso a paso:
-
-1. El sistema recibe el ID del paciente.
-2. Busca los datos del paciente en SQLite (SQL).
-3. Busca la información médica en MongoDB (NoSQL).
-4. Combina ambos resultados en una sola respuesta JSON.
+```
+id_paciente
+```
 
 ---
 
-## 📦 Ejemplo de respuesta
+## 🚀 Instalación y Ejecución
+
+### 1. Clonar el repositorio
+
+```
+git clone https://github.com/JSebas27/Sistema-Gestion-Medica.git
+cd Sistema-Gestion-Medica
+```
+
+---
+
+### 2. Crear entorno virtual
+
+```
+python -m venv .venv
+```
+
+Activar entorno:
+
+**Windows:**
+
+```
+.venv\\Scripts\\activate
+```
+
+---
+
+### 3. Instalar dependencias
+
+```
+pip install flask flask_sqlalchemy pymongo
+```
+
+---
+
+### 4. Ejecutar MongoDB
+
+Asegúrate de que MongoDB esté corriendo:
+
+```
+mongosh
+```
+
+---
+
+### 5. Ejecutar la aplicación
+
+```
+python app.py
+```
+
+---
+
+## 🔥 Endpoint Principal (Integración SQL + NoSQL)
+
+### 📍 GET /perfil_paciente/<id>
+
+Este endpoint implementa persistencia políglota combinando:
+
+* Datos estructurados desde SQL
+* Datos dinámicos desde MongoDB
+
+---
+
+## 🧪 Ejemplo de uso
+
+### Request:
+
+```
+http://127.0.0.1:5000/perfil_paciente/1
+```
+
+### Response:
 
 ```json
 {
-  "sql": [1, "Juan Pérez", 30],
-  "nosql": {
-    "paciente_id": 1,
-    "informacion_medica": {
-      "alergias": ["Penicilina", "Polen"],
-      "habitos": {
-        "fuma": false,
-        "alcohol": "ocasional"
-      }
+  "id": 1,
+  "nombre": "Juan Perez",
+  "correo": "juan@email.com",
+  "telefono": "123456789",
+  "alergias": ["Polen"],
+  "habitos": {
+    "fuma": false
+  },
+  "medicamentos": [
+    {
+      "nombre": "Ibuprofeno",
+      "dosis": "400 mg"
     }
-  }
+  ]
 }
+```
 
-## 🚀 PASO A PASO DEL FUNCIONAMIENTO
+---
 
-### 1️⃣ Inicio del servidor
-Se ejecuta la aplicación Flask:
+## 🧩 Persistencia Políglota
 
-```bash
-python app.py
+El sistema implementa una integración entre dos modelos de bases de datos:
 
-http://127.0.0.1:5000
+* **SQL:** garantiza consistencia y estructura
+* **NoSQL:** permite flexibilidad y escalabilidad
 
-### 2️⃣ Base de datos SQL (SQLite)
-📌 Qué hace
+Esto permite combinar lo mejor de ambos enfoques en una sola aplicación.
 
-Guarda información estructurada como:
+---
 
-Pacientes
-Médicos
-Citas
-📌 Ejemplo de flujo
-Se crea un paciente desde el endpoint /pacientes
-Se guarda en SQLite usando SQLAlchemy
-Los datos quedan almacenados en la tabla pacientes
+## 📸 Evidencia de Ejecución
 
-### 3️⃣ Base de datos NoSQL (MongoDB)
-📌 Qué hace
+El endpoint fue probado correctamente mostrando la integración entre SQL y MongoDB, devolviendo un JSON con información combinada.
 
-Guarda información flexible del paciente como:
+*(Aquí puedes agregar una captura de pantalla si el profesor lo solicita)*
 
-Alergias
-Hábitos
-Información médica adicional
-📌 Ejemplo de flujo
-Se envía información al endpoint /mongo/paciente
-Se guarda en la colección info_paciente
-Cada documento se relaciona con un paciente mediante paciente_id
+---
 
-### 4️⃣ Relación entre SQL y NoSQL
+## 📌 Conclusión
 
-Ambas bases de datos se conectan mediante:
-id del paciente (id_paciente)
+El sistema cumple con los requisitos de escalabilidad mediante el uso de NoSQL, logrando una solución eficiente, flexible y preparada para manejar datos médicos complejos.
 
-### 5️⃣ Endpoint puente (INTEGRACIÓN)
-📌 Endpoint principal:
-GET /paciente/completo/<id>
+---
 
-## Resultado final
-
-El sistema responde con algo como:
-{
-  "sql": [1, "Juan Pérez", 30],
-  "nosql": {
-    "paciente_id": 1,
-    "informacion_medica": {
-      "alergias": ["Penicilina", "Polen"],
-      "habitos": {
-        "fuma": false,
-        "alcohol": "ocasional"
-      }
-    }
-  }
-}
-
-## Integrantes
+## 👨‍💻 Autor(es)
 
 * José Romo
 * Nicolás García
 
 ---
-
-## Asignatura
-
-Nuevas Tecnologías de Desarrollo
-
----
-
-## Notas
-
-Este proyecto corresponde a un desarrollo académico enfocado en la implementación de APIs REST y modelado de datos relacional.
